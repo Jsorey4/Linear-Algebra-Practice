@@ -3,32 +3,30 @@
 #include <iomanip>
 using namespace std;
 
-void createM1(int rows, int cols);
-void createM2(int rows, int cols);
+void createMatrix(int **arr, int rows, int cols);
+void ID_Matrix(int rows, int cols);
+// void clearMemory(int **mtrx1, int m1Rows, int **mtrx2, int m2Rows);
 
 int main()
 {
     // Variable initialization:
     int m1_rows = 0, m1_cols = 0, m2_rows = 0, m2_cols = 0;
 
-    // Minimum size of each dimension
-    int rows = 2, cols = 2;
-
     char symmetricResponse = 'N', redoRowsAndCols = 'N';
 
     bool symmetricMatrix = false;
 
-    cout << "How many rows would you like in the first matrix?";
+    cout << "How many rows would you like in the first matrix? ";
     cin >> m1_rows;
 
-    cout << "How many columns would you like in the first matrix?";
+    cout << "How many columns would you like in the first matrix? ";
     cin >> m1_cols;
 
-    cout << "How many rows would you like in the second matrix?";
-    cin >> m2_rows;
+    // cout << "How many rows would you like in the second matrix? ";
+    // cin >> m2_rows;
 
-    cout << "How many columns would you like in the second matrix?";
-    cin >> m2_cols;
+    // cout << "How many columns would you like in the second matrix? ";
+    // cin >> m2_cols;
 
     // // Probably going to need a decision like, "Which matrix do you want to be symmetric? First, second, or neither."
     // cout << "Would you like for the matrix to be symmetric? Please enter 'Y' or 'N'.";
@@ -48,93 +46,118 @@ int main()
     //             "symmetric matrix?\n";
     // }
 
-    int seed = 0;         
+    int seed = time(0);         
     srand(seed);
 
-    createM1(m1_rows, m1_cols);
+    // Initializing the first and second matrices
+    int **matrix1 = new int*[m1_rows];
+
+    for(int i = 0; i < m1_rows; i++)
+        matrix1[i] = new int[m1_cols];
+    
+    // int **matrix2 = new int*[m2_rows];
+
+    // for(int i = 0; i < m2_rows; i++)
+    //     matrix2[i] = new int[m2_cols];
+
+    // Calling the functions to populate the matrices
+    createMatrix(matrix1, m1_rows, m1_cols);
 
     cout << endl;
     
-    createM2(m2_rows, m2_cols);
+    // createMatrix(matrix2, m2_rows, m2_cols);
 
+    // Initializing an Identity Matrix (based on M1 for now, will probably change later)
+    ID_Matrix(m1_rows, m1_cols);
     
-    
+    // Preventing memory leakage
+    // clearMemory(matrix1, m1_rows, matrix2, m2_rows);
 
     return 0;
 }
 
 // Each function will correspond to a certain matrix manipulation
 
-// Create the first matrix:
-void createM1(int rows, int cols)
+// Create a matrix:
+void createMatrix(int **arr,int rows, int cols)
 {
-    int **matrix1 = new int*[rows];
-
-    for(int i = 0; i < rows; i++)
-        matrix1[i] = new int[cols];
-
-    // Creating the elemnts to the array/matrix
+    // Creating the elemnts in the array/matrix
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < cols; j++)
         {
-            
-            matrix1[i][j] = rand() % 10;
-            cout << setw(4) << matrix1[i][j]; // printing out the matrix 
+            arr[i][j] = rand() % 10;
+            cout << setw(4) << arr[i][j]; // printing out the matrix 
         }
         cout << '\n';
     }
-
-    // Preventing memory leakage
-    for (int i = 0; i < rows; i++)
-    {
-        delete[] matrix1[i];
-    }
-    delete[] matrix1;
 }
-
-// Create the first matrix:
-void createM2(int rows, int cols)
-{
-    int **matrix2 = new int*[rows];
-
-    for(int i = 0; i < rows; i++)
-        matrix2[i] = new int[cols];
-
-    // Creating the elemnts to the array/matrix
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            
-            matrix2[i][j] = rand() % 10;
-            cout << setw(4) << matrix2[i][j]; // printing out the matrix 
-        }
-        cout << '\n';
-    }
-
-    // Preventing memory leakage
-    for (int i = 0; i < rows; i++)
-    {
-        delete[] matrix2[i];
-    }
-    delete[] matrix2;
-}
-
 
 // // Will create a symmetric matrix along the main diagonal.
 // void symMatrix()
 // {
-
 // }
 
-// void LU_Matrix(int arr[][])
+// This will create an indentity matrix of a given size. 
+void ID_Matrix(int rows, int cols)
+{
+    int **IDmtrx = new int*[rows];
+
+    for(int i = 0; i < rows; i++)
+        IDmtrx[i] = new int[cols](); // Initalizing to 0, then change diagonal to 1
+
+    // Creating the elements in the array/matrix
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            if(i == j)
+            {
+                IDmtrx[i][j] = 1;
+            }
+            cout << setw(4) << IDmtrx[i][j]; // printing out the matrix 
+        }
+        cout << '\n';
+    }
+}
+
+// // Will use this function plenty. It will calculate the total dot product between two matrices
+// void dotProduct(int **arr)
 // {
-
 // }
 
-
-// void LDU_Matrix(int arr[][])
+// void CR_Matrix(int **arr)
 // {
-
 // }
+
+// void LU_Matrix(int **arr)
+// {
+// }
+
+// void LDU_Matrix(int **arr)
+// {
+// }
+
+// void QR_Matrix(int **arr)
+// {
+// }
+
+// // Will be used to solve systems of linear equations
+// void GaussElim()
+// {
+// }
+
+void clearMemory(int **mtrx1, int m1Rows, int **mtrx2, int m2Rows)
+{
+    for (int i = 0; i < m1Rows; i++)
+    {
+        delete[] mtrx1[i];
+    }
+    delete[] mtrx1;
+
+    for (int i = 0; i < m2Rows; i++)
+    {
+        delete[] mtrx2[i];
+    }
+    delete[] mtrx2;
+}
